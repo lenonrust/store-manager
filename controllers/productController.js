@@ -18,5 +18,11 @@ const productController = {
       res.status(404).json({ message: error.message });
     }
   },
+  async add(req, res) {
+    const value = req.body;
+    const id = await productService.add(value);
+    const result = await productService.listByid(id);
+    res.status(201).json(result);
+  },
 };
 module.exports = productController;

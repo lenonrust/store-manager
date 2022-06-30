@@ -13,6 +13,10 @@ const productService = {
     }
     return item;
   }, 
+  async add(value) {
+    const id = await productModel.add(value);
+    return id;
+  },
 };
 
 module.exports = productService;
