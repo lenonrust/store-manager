@@ -13,7 +13,7 @@ const productController = {
     try {
     const { id } = req.params;
     const item = await productService.listByid(id);
-    res.json(item);  
+    res.status(200).json(item);  
     } catch (error) {
       res.status(404).json({ message: error.message });
     }

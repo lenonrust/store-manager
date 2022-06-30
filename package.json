@@ -15,7 +15,8 @@
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
     "migration": "node -e \"require('./__tests__/_utils').runMigration()\"",
     "seed": "node -e \"require('./__tests__/_utils').runSeed()\"",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test:unity": "mocha tests/unit/**/*.js --exit"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "body-parser": "^1.19.0",
+    "chai-as-promised": "^7.1.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-rescue": "^1.1.26",
