@@ -1,15 +1,12 @@
 const Joi = require('joi');
 const productModel = require('../models/productModel');
+const { runSchema } = require('./utils');
 
 const productService = {
-  
-  async validateBodyAdd(value) {
-    const schema = Joi.object({
+
+  validateBodyAdd: runSchema(Joi.object({
       name: Joi.string().min(5).max(100).required(),
-    });
-    const result = await schema.validateAsync(value);
-    return result;
-  },
+    })),
   
   async list() {
     const items = await productModel.list();

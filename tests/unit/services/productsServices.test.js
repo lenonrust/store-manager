@@ -31,6 +31,7 @@ describe('services/productServices', () => {
       chai.expect(result).to.be.deep.equal(items);
     })
   });
+  
   describe('listById', () => {
     it('Should resturn an object with id and name', async () => {
       const item = {
@@ -47,4 +48,20 @@ describe('services/productServices', () => {
       chai.expect(result).to.eventually.throw(Error);
     })
   });
+  
+  describe('add', () => {
+
+    const value = {
+      name: "ProductX",
+    }
+
+    it('Should return an error if "productModel.add" fails', () => {
+      sinon.stub(productModel, 'add').rejects();
+      chai.expect(productService.add(value)).to.eventually.be.rejected;
+    });
+    it('Should return id from "productModel.add"', () => {
+      sinon.stub(productModel, 'add').resolves(1);
+      chai.expect(productService.add(value)).to.eventually.equal(1);
+    });
+  })
 });

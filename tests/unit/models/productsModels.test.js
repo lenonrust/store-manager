@@ -10,7 +10,7 @@ describe('/model/productModels', () => {
   beforeEach(sinon.restore);
 
   describe('list', () => {
-    it('return error if mysql returns error', () => {
+    it('Should return error if mysql returns error', () => {
       sinon.stub(StoreManager, 'query').rejects();
       const result = productModel.list();
       chai.expect(result).to.eventually.be.rejected;
@@ -20,7 +20,7 @@ describe('/model/productModels', () => {
       const result = productModel.list();
       chai.expect(result).to.eventually.be.undefined;
     });
-    it('testing if return a list', () => {
+    it('Should return a list', () => {
       sinon.stub(StoreManager, 'query').resolves([[{}]]);
       const result = productModel.list();
       chai.expect(result).to.eventually.be.ok;
