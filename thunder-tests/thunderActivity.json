@@ -162,12 +162,12 @@
     "method": "POST",
     "sortNum": 0,
     "created": "2022-06-29T23:28:47.648Z",
-    "modified": "2022-06-30T22:28:11.642Z",
+    "modified": "2022-07-02T18:23:18.129Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n    \"name\": \"ProdutoX\"\n}",
+      "raw": "{\n    \"name\": \"prod\"\n}",
       "form": []
     },
     "tests": []

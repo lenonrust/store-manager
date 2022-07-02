@@ -33,10 +33,10 @@ describe('services/productServices', () => {
   });
   describe('listById', () => {
     it('Should resturn an object with id and name', async () => {
-    const item = {
-    "id": 1,
-    "name": "Martelo de Thor"
-    }
+      const item = {
+        "id": 1,
+        "name": "Martelo de Thor"
+      }
       sinon.stub(productModel, 'listByid').resolves(item);
       const result = await productService.listByid('1');
       chai.expect(result).to.be.deep.equal(item);
@@ -46,5 +46,5 @@ describe('services/productServices', () => {
       const result = productService.listByid('a');
       chai.expect(result).to.eventually.throw(Error);
     })
-  })
+  });
 });

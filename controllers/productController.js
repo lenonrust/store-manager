@@ -6,23 +6,28 @@ const productController = {
   
   async list(_req, res) {
   const items = await productService.list();
-  res.json(items);
+  return res.json(items);
   },
 
   async listByid(req, res) {
     try {
     const { id } = req.params;
     const item = await productService.listByid(id);
-    res.status(200).json(item);  
+    return res.status(200).json(item);  
     } catch (error) {
-      res.status(404).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
     }
   },
-  async add(req, res) {
-    const value = req.body;
-    const id = await productService.add(value);
-    const result = await productService.listByid(id);
-    res.status(201).json(result);
+  async add(req, res, next) {
+    try {
+      const data = await productService.validateBodyAdd(req.body);
+      const id = await productService.add(data);
+      const result = await productService.listByid(id);
+      return res.status(201).json(result);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   },
 };
 module.exports = productController;

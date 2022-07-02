@@ -3,9 +3,9 @@ const productController = require('../controllers/productController');
 
 const productRouter = Router();
 
-productRouter.get('/', productController.list);
-
 productRouter.get('/:id', productController.listByid);
+
+productRouter.get('/', productController.list);
 
 productRouter.post('/', productController.add);
 

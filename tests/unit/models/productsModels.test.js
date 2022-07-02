@@ -33,4 +33,11 @@ describe('/model/productModels', () => {
       chai.expect(result).to.eventually.be.instanceOf(Object);
     });
   });
+  describe('add', () => {
+    it('Should return an id', () => {
+      sinon.stub(StoreManager, 'query').resolves([[{}]]);
+      const result = productModel.add({name: 'produtoX'});
+      chai.expect(result).to.eventually.be.instanceOf(String);
+    });
+  });
 });
