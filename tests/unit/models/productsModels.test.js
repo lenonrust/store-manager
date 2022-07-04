@@ -6,7 +6,7 @@ const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiAsPromised);
 
-describe('/model/productModels', () => {
+describe('/model/productModel', () => {
   beforeEach(sinon.restore);
 
   describe('list', () => {

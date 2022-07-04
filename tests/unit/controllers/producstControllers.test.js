@@ -70,9 +70,9 @@ describe('controllers/productControllers', () => {
     })
     it('Should call "res" with "status 201" and a "json"', async () => {
       const res = {
-      status: sinon.stub().callsFake(() => res),
-      json: sinon.stub().returns(),
-      }
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
+      };
       
       sinon.stub(productService, 'validateBodyAdd').resolves();
       sinon.stub(productService, 'add').resolves();
