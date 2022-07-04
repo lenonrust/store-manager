@@ -1,9 +1,18 @@
 const errorMiddlewareHandler = ({ message }, _req, res, _next) => {
-  switch (message) {
-    case '"name" is required':
+  const required = message.includes('required');
+  const length = message.includes('length');
+  const greater = message.includes('greater');
+  const notFound = message.includes('found');
+
+  switch (true) {
+    case required:
       return res.status(400).json({ message });
-    case '"name" length must be at least 5 characters long':
+    case length:
       return res.status(422).json({ message });
+    case greater:
+      return res.status(422).json({ message });
+    case notFound:
+      return res.status(404).json({ message });
     default: res.sendStatus(500);
   }
 };

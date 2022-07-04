@@ -25,7 +25,6 @@ const productController = {
       const result = await productService.listByid(id);
       return res.status(201).json(result);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   },
