@@ -37,7 +37,7 @@ describe('controllers/productControllers', () => {
       json: sinon.stub().returns(),
      }
       sinon.stub(productService, 'listByid').resolves(item);
-      const result = await productController.listByid(req, res);
+      await productController.listByid(req, res);
       chai.expect(res.status.getCall(0).args[0]).to.equal(200);
       chai.expect(res.json.getCall(0).args[0]).to.be.deep.equal(item)
       
@@ -46,7 +46,8 @@ describe('controllers/productControllers', () => {
       const res = {
       status: sinon.stub().callsFake(() => res),
       json: sinon.stub().returns(),
-     }
+      }
+
       sinon.stub(productService, 'listByid').rejects();
       const result = await productController.listByid({}, res);
       chai.expect(res.status.getCall(0).args[0]).to.equal(404);

@@ -8,9 +8,31 @@ chai.use(chaiAsPromised);
 
 describe('/model/salesModel', () => {
   beforeEach(sinon.restore);
-   
+  
+  describe('lis', () => {
+    it('Should return error if mysql query fails', () => {
+      sinon.stub(StoreManager, 'query').rejects(); 
+      chai.expect(saleModel.list()).to.eventually.be.rejected;
+    });
+     it('Should return an "Object" in case of success', () => {
+      sinon.stub(StoreManager, 'query').resolves([{  }]);     
+      chai.expect(saleModel.list()).to.eventually.be.equal([{  }]);
+    })
+  });
+
+  describe('lisById', () => {
+     it('Should return error if mysql query fails', () => {
+      sinon.stub(StoreManager, 'query').rejects(); 
+      chai.expect(saleModel.listById(1)).to.eventually.be.rejected;
+     });
+    it('Should return an "Array" in case of success', () => {
+      sinon.stub(StoreManager, 'query').resolves([{  }]);     
+      chai.expect(saleModel.listById(1)).to.eventually.be.equal([{  }]);
+    })
+  });
+
   describe('add', () => {
-    it('Should return error if mysql returns error', () => {
+    it('Should return error if mysql query fails', () => {
       sinon.stub(StoreManager, 'query').rejects();     
       chai.expect(saleModel.add()).to.eventually.be.rejected;
     })
@@ -21,7 +43,7 @@ describe('/model/salesModel', () => {
     
   });
   describe('addProduct', () => {
-    it('Should return error if mysql returns error', () => {
+    it('Should return error if mysql query fails', () => {
       sinon.stub(StoreManager, 'query').rejects();
       chai.expect(saleModel.addProduct()).to.eventually.be.rejected;
     });
