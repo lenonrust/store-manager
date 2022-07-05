@@ -29,11 +29,6 @@ describe('controllers/salesController', () => {
     });
 
     it('Should return a "res" with "status" 201 and a json', async () => {
-     
-      // const res = {};
-      // res.status = sinon.stub().returns(res);
-      // res.json = sinon.stub().returns();
-      
       const res = {
         status: sinon.stub().callsFake(() => res),
         json: sinon.stub().returns(),
