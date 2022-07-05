@@ -10,6 +10,21 @@ describe('services/productServices', () => {
 
   beforeEach(sinon.restore);
 
+  describe('checkExist', () => {
+    it('Should return an error if "productModel.exist" fails', () => {
+      sinon.stub(productModel, 'exist').rejects();
+      chai.expect(productService.checkExist(0)).to.be.eventually.rejected;
+    });
+    it('Should return an error if "productModel.exist" returns false', () => {
+      sinon.stub(productModel, 'exist').resolves(false);
+      chai.expect(productService.checkExist(0)).to.eventually.be.rejectedWith('Product not found');
+    });
+     it('Should return undefined if "productModel.exist" returns true', () => {
+      sinon.stub(productModel, 'exist').resolves(true);
+      chai.expect(productService.checkExist(0)).to.eventually.be.undefined;
+    });
+  });
+
   describe('list', () => {
     it('should return a list of objects', async () => {
       const items = [
@@ -63,5 +78,25 @@ describe('services/productServices', () => {
       sinon.stub(productModel, 'add').resolves(1);
       chai.expect(productService.add(value)).to.eventually.equal(1);
     });
-  })
+  });
+  describe('update', () => {
+    it('Should return an error "productModel.update" fails', () => {
+      sinon.stub(productModel, 'update').rejects();
+      chai.expect(productService.update(0, {})).to.be.eventually.rejected;
+    });
+    it('Should return "undefined" "productModel.remove" success', () => {
+      sinon.stub(productModel, 'update').resolves();
+      chai.expect(productService.remove(0, {})).to.be.eventually.undefined;
+    });
+  });
+  describe('remove', () => {
+    it('Should return an error "productModel.remove" fails', () => {
+      sinon.stub(productModel, 'remove').rejects();
+      chai.expect(productService.remove(0)).to.be.eventually.rejected;
+    });
+    it('Should return "undefined" "productModel.remove" success', () => {
+      sinon.stub(productModel, 'remove').resolves();
+      chai.expect(productService.remove(0)).to.be.eventually.undefined;
+  });
+  });
 });

@@ -28,5 +28,30 @@ const productController = {
       next(error);
     }
   },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      await productService.validateBodyAdd(req.body);
+      const changes = await productService.validateBodyEdit(req.body);
+      await productService.checkExist(id);
+      await productService.update(id, changes);
+      const updatedData = await productService.listByid(id);
+      return res.status(200).json(updatedData);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async remove(req, res) {
+    try {
+      const { id } = req.params;
+      await productService.checkExist(id);
+      await productService.remove(id);
+      return res.sendStatus(204);
+    } catch (error) {
+      return res.status(404).json({ message: error.message });
+    }
+  },
 };
 module.exports = productController;

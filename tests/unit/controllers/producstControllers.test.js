@@ -25,7 +25,7 @@ describe('controllers/productControllers', () => {
   describe('listById', () => {
     it('Should return status and object', async () => {
       
-      const req = {params: { id: 1 }};
+      const req = { params: { id: 1 } };
       
       const item = {
         "id": 1,
@@ -33,9 +33,9 @@ describe('controllers/productControllers', () => {
       };
 
       const res = {
-      status: sinon.stub().callsFake(() => res),
-      json: sinon.stub().returns(),
-     }
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
+      }
       sinon.stub(productService, 'listByid').resolves(item);
       await productController.listByid(req, res);
       chai.expect(res.status.getCall(0).args[0]).to.equal(200);
@@ -44,15 +44,15 @@ describe('controllers/productControllers', () => {
     })
     it('Should return an error 404', async () => {
       const res = {
-      status: sinon.stub().callsFake(() => res),
-      json: sinon.stub().returns(),
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
       }
 
       sinon.stub(productService, 'listByid').rejects();
       const result = await productController.listByid({}, res);
       chai.expect(res.status.getCall(0).args[0]).to.equal(404);
     })
-  })
+  });
   describe('add', () => {
     it('Should return an error if productService.validateBodyAdd fails', () => {
       sinon.stub(productService, 'validateBodyAdd').rejects();
@@ -83,5 +83,81 @@ describe('controllers/productControllers', () => {
       chai.expect(res.json.getCall(0).args[0]).to.be.deep.equal({ id: 1 })
     })
     
-  })
+  });
+  describe('update', () => {
+    it('Should return error if productService.validateBodyAdd fails', () => {
+      sinon.stub(productService, 'validateBodyAdd').rejects();
+      chai.expect(productController.update({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return error if productService.validateBodyEdit fails', () => {
+      sinon.stub(productService, 'validateBodyAdd').resolves();
+      sinon.stub(productService, 'validateBodyEdit').rejects();
+      chai.expect(productController.update({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return error if productService.checkExist fails', () => {
+      sinon.stub(productService, 'validateBodyAdd').resolves();
+      sinon.stub(productService, 'validateBodyEdit').resolves();
+      sinon.stub(productService, 'checkExist').rejects();
+      chai.expect(productController.update({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return error if productService.update fails', () => {
+      sinon.stub(productService, 'validateBodyAdd').resolves();
+      sinon.stub(productService, 'validateBodyEdit').resolves();
+      sinon.stub(productService, 'checkExist').resolves();
+      sinon.stub(productService, 'update').rejects();
+      chai.expect(productController.update({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return error if productService.lisById fails', () => {
+      sinon.stub(productService, 'validateBodyAdd').resolves();
+      sinon.stub(productService, 'validateBodyEdit').resolves();
+      sinon.stub(productService, 'checkExist').resolves();
+      sinon.stub(productService, 'update').resolves();
+      sinon.stub(productService, 'listByid').rejects();
+      chai.expect(productController.update({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return an Object in case of success', async () => {
+      sinon.stub(productService, 'validateBodyAdd').resolves();
+      sinon.stub(productService, 'validateBodyEdit').resolves();
+      sinon.stub(productService, 'checkExist').resolves();
+      sinon.stub(productService, 'update').resolves();
+      sinon.stub(productService, 'listByid').resolves({});
+      
+      const req = { params: { id: 2 , name: "Martelo do Batman" } };
+      
+      const item = { id: 1, name: "Martelo do Batman" };
+
+      const res = {
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
+      }
+      await productController.update(req, res);
+      chai.expect(res.status.getCall(0).args[0]).to.be.equal(200);
+      chai.expect(res.json.getCall(0).args[0]).to.be.deep.equal({})
+    });
+  });
+  describe('remove', () => {
+    it('Should return an error if "productService.checkExist" fails', () => {
+      sinon.stub(productService, 'checkExist').rejects();
+      chai.expect(productController.remove({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return an error if "productService.remove" fails', () => {
+      sinon.stub(productService, 'checkExist').resolves();
+      sinon.stub(productService, 'remove').rejects();
+      chai.expect(productController.remove({}, {})).to.be.eventually.rejected;
+    });
+    it('Should call "res.sendStatus" with "status" 204', async () => {
+
+      req = {params: {id: 1}}
+      
+      const res = {
+        sendStatus: sinon.stub().returns(),
+      };
+
+      sinon.stub(productService, 'checkExist').resolves();
+      sinon.stub(productService, 'remove').resolves();
+      await productController.remove(req, res);
+      chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204)
+    });
+  });
+  
 })
