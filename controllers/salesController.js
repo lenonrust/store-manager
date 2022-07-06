@@ -64,7 +64,6 @@ const salesController = {
       await Promise.all(changes.map((item) => productService.checkExist(item.productId))); 
       await salesService.listById(id);
       const result = await salesService.update(id, changes);
-      console.log(result);
       return res.status(200).json(result);
     } catch (error) {
       next(error);

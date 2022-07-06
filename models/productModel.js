@@ -34,6 +34,12 @@ const productModel = {
     const sql = 'UPDATE products SET ? WHERE id = ?;';
     await StoreManager.query(sql, [changes, id]);
   },
+
+  async search(term) {
+    const sql = 'select * from products where name like ?';
+    const [item] = await StoreManager.query(sql, [term]);
+    return item;
+  }, 
 };
 
 module.exports = productModel;

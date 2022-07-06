@@ -42,6 +42,11 @@ const productService = {
   async update(id, changes) {
     await productModel.update(id, changes);
   },
+
+  async search(term) {
+    const item = await productModel.search(term);
+    return item;
+  },
 };
 
 module.exports = productService;
