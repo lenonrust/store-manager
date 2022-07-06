@@ -57,7 +57,6 @@ const salesController = {
   async update(req, res, next) {
     try {
       const { id } = req.params;
-      console.log(req.params);
       const changes = req.body;
 
       await Promise.all(changes.map((item) => salesService.validateBodyAddProduct(item)));
