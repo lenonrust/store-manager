@@ -2,6 +2,12 @@ const StoreManager = require('./db');
 
 const saleModel = {
 
+   async exist(id) {
+    const sql = 'SELECT 1 FROM sales WHERE id = ?';
+    const [[item]] = await StoreManager.query(sql, [id]);
+    return !!item;
+  },
+
   async list() {
     const sql = `SELECT 
     sale_id as saleId,
@@ -36,6 +42,16 @@ const saleModel = {
     VALUES (?,?,?)`;
     const [{ insertId }] = await StoreManager.query(sql, [id, value.productId, value.quantity]);
     return insertId;
+  },
+
+  async remove(id) {
+    const sql = 'DELETE FROM sales WHERE id = ?';
+    await StoreManager.query(sql, [id]);
+  },
+
+  async removeProduct(id) {
+    const sql = 'DELETE FROM sales_products WHERE sale_id = ?';
+    await StoreManager.query(sql, [id]);
   },
 };
 

@@ -41,6 +41,18 @@ const salesController = {
       next(error);
     }
   },
+
+  async remove(req, res) {
+    try {
+      const { id } = req.params;
+      await salesService.checkExist(id);
+      await salesService.removeProduct(id);
+      await salesService.remove(id);
+      return res.sendStatus(204);
+    } catch (error) {
+      return res.status(404).json({ message: error.message });
+    }
+  },
 };
 
 module.exports = salesController;

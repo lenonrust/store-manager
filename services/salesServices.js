@@ -9,6 +9,11 @@ const salesService = {
     quantity: Joi.number().required().min(1),
   })),
 
+  async checkExist(id) {
+    const exist = await salesModel.exist(id);
+    if (!exist) throw new Error('Sale not found');
+  },
+
   async list() {
     const items = await salesModel.list();
     return items;
@@ -30,6 +35,14 @@ const salesService = {
       itemsSold: value,
     };
     return result;
+  },
+
+  async remove(id) {
+    await salesModel.remove(id);
+  },
+
+  async removeProduct(id) {
+    await salesModel.removeProduct(id);
   },
 };
 
