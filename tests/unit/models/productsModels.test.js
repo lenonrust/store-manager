@@ -25,7 +25,7 @@ describe('/model/productModel', () => {
   });
 
   describe('list', () => {
-    it('Should return error if mysql returns error', () => {
+    it('Should return error if mysql query fails', () => {
       sinon.stub(StoreManager, 'query').rejects();
       const result = productModel.list();
       chai.expect(result).to.eventually.be.rejected;
@@ -73,6 +73,16 @@ describe('/model/productModel', () => {
     it('should return undefined in case of success', () => {
       sinon.stub(StoreManager, 'query').resolves();
       return chai.expect(productModel.update(0, {})).to.be.eventually.undefined;
+    });
+  });
+  describe('search', () => {
+    it('Should return error if mysql query fails', () => {
+      sinon.stub(StoreManager, 'query').rejects();
+      chai.expect(productModel.search('')).to.eventually.be.rejected;
+    })
+    it('Should return a list', () => {
+      sinon.stub(StoreManager, 'query').resolves([[{}]]);
+      chai.expect(productModel.search('Martelo')).to.eventually.be.deep.equal([{}])
     });
   });
 });

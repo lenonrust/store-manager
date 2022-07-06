@@ -123,13 +123,12 @@ describe('controllers/productControllers', () => {
       sinon.stub(productService, 'listByid').resolves({});
       
       const req = { params: { id: 2 , name: "Martelo do Batman" } };
-      
-      const item = { id: 1, name: "Martelo do Batman" };
 
       const res = {
         status: sinon.stub().callsFake(() => res),
         json: sinon.stub().returns(),
       }
+
       await productController.update(req, res);
       chai.expect(res.status.getCall(0).args[0]).to.be.equal(200);
       chai.expect(res.json.getCall(0).args[0]).to.be.deep.equal({})
@@ -158,6 +157,34 @@ describe('controllers/productControllers', () => {
       await productController.remove(req, res);
       chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204)
     });
+  });
+  describe('search', () => {
+      
+    
+    it('Should return an error "productService.list" fails', () => {
+      sinon.stub(productService, 'search').rejects();
+      chai.expect(productController.search({},{})).to.eventually.be.rejected;
+    });
+    it(`Should call "productService.list" if "searchTerm" is empty and return 
+    "res.Status" 200 with json`, () => {
+      const req = { query: { q: '' } };
+      const res = {
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
+      }
+      sinon.stub(productService, 'list').resolves({})
+      chai.expect(productController.search(req, res)).to.eventually.be.deep.equal({})
+    });
+     it(`Should return an obejct if "productService.search" success`, () => {
+      const req = { query: { q: 'Martelo' } };
+      const res = {
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
+      }
+      sinon.stub(productService, 'search').resolves({});
+      chai.expect(productController.search(req, res)).to.eventually.be.deep.equal({})
+    });
+    
   });
   
 })

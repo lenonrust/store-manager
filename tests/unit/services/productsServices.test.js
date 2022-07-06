@@ -99,4 +99,14 @@ describe('services/productServices', () => {
       chai.expect(productService.remove(0)).to.be.eventually.undefined;
   });
   });
+  describe('list', () => {
+    it('should return an error if "productModel.search" fails', async () => {
+      sinon.stub(productModel, 'search').rejects();
+      chai.expect(productService.search('Martelo')).to.eventually.be.rejected;
+    });
+    it('should return a list of objects', async () => {
+      sinon.stub(productModel, 'search').resolves([{}]);
+      chai.expect(productService.search('Martelo')).to.eventually.be.deep.equal([{}]);
+    });
+  });
 });
