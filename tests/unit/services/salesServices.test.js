@@ -9,6 +9,21 @@ chai.use(chaiAsPromised);
 describe('/service/sealesService', () => {
   beforeEach(sinon.restore);
 
+describe('checkExist', () => {
+    it('Should return an error if "saleModel.exist" fails', () => {
+      sinon.stub(salesModel, 'exist').rejects();
+      chai.expect(salesService.checkExist(0)).to.be.eventually.rejected;
+    });
+    it('Should return an error if "saleModel.exist" returns false', () => {
+      sinon.stub(salesModel, 'exist').resolves(false);
+      chai.expect(salesService.checkExist(0)).to.eventually.be.rejectedWith('Product not found');
+    });
+     it('Should return undefined if "saleModel.exist" returns true', () => {
+      sinon.stub(salesModel, 'exist').resolves(true);
+      chai.expect(salesService.checkExist(0)).to.eventually.be.undefined;
+    });
+  });
+
   describe('list', () => {
     it('Should return an error if "salesModel.list" fails', () => {
       sinon.stub(salesModel, 'list').rejects();
@@ -51,5 +66,25 @@ describe('/service/sealesService', () => {
       const result =  await salesService.addProduct([{}])
       chai.expect(result).to.deep.equal(item)
     });
+  });
+ describe('remove', () => {
+    it('Should return an error "salesModel.remove" fails', () => {
+      sinon.stub(salesModel, 'remove').rejects();
+      chai.expect(salesService.remove(0)).to.be.eventually.rejected;
+    });
+    it('Should return "undefined" "salesModel.remove" success', () => {
+      sinon.stub(salesModel, 'remove').resolves();
+      chai.expect(salesService.remove(0)).to.be.eventually.undefined;
+  });
+ });
+  describe('removeProduct', () => {
+    it('Should return an error "salesModel.removeProduct" fails', () => {
+      sinon.stub(salesModel, 'removeProduct').rejects();
+      chai.expect(salesService.removeProduct(0)).to.be.eventually.rejected;
+    });
+    it('Should return "undefined" "salesModel.removeProduct" success', () => {
+      sinon.stub(salesModel, 'removeProduct').resolves();
+      chai.expect(salesService.removeProduct(0)).to.be.eventually.undefined;
+  });
   });
 });

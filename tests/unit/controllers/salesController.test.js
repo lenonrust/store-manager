@@ -105,5 +105,35 @@ describe('controllers/salesController', () => {
       chai.expect(res.status.getCall(0).args[0]).to.equal(201);
       chai.expect(res.json.getCall(0).args[0]).to.be.deep.equal({})
     })
-  })
+  });
+  describe('remove', () => {
+    it('Should return an error if "salesService.checkExist" fails', () => {
+      sinon.stub(salesService, 'checkExist').rejects();
+      chai.expect(salesController.remove({}, {})).to.be.eventually.rejected;
+    });
+    it('Should return an error if "salesService.removeProduct" fails', () => {
+      sinon.stub(salesService, 'checkExist').resolves();
+      sinon.stub(salesService, 'removeProduct').rejects();
+      chai.expect(salesController.remove({}, {})).to.be.eventually.rejected;
+    });
+     it('Should return an error if "salesService.remove" fails', () => {
+      sinon.stub(salesService, 'checkExist').resolves();
+      sinon.stub(salesService, 'removeProduct').resolves();
+      sinon.stub(salesService, 'remove').resolves();
+      chai.expect(salesController.remove({}, {})).to.be.eventually.rejected;
+    });
+    it('Should call "res.sendStatus" with "status" 204', async () => {
+
+      req = {params: {id: 1}}
+      
+      const res = {
+        sendStatus: sinon.stub().returns(),
+      };
+
+      sinon.stub(salesService, 'checkExist').resolves();
+      sinon.stub(salesService, 'remove').resolves();
+      await salesController.remove(req, res);
+      chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204)
+    });
+  });
 })
