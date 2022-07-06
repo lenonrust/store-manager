@@ -87,4 +87,20 @@ describe('checkExist', () => {
       chai.expect(salesService.removeProduct(0)).to.be.eventually.undefined;
   });
   });
+  describe('update', () => {
+
+    it('Should return error if "salesModel.update" fails', () => {
+      sinon.stub(salesModel, 'update').rejects();
+      chai.expect(salesService.update(1, {})).to.eventually.be.rejected;
+    });
+    it('Should return an object with "saleId" and "itemsUpdated"', async () => {
+      const item = {
+      saleId: 1,
+      itemsUpdated: [{}],
+      };
+      sinon.stub(salesModel, 'update').resolves();
+      const result =  await salesService.update(1,[{}])
+      chai.expect(result).to.deep.equal(item)
+    });
+  });
 });

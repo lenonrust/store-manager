@@ -53,6 +53,13 @@ const saleModel = {
     const sql = 'DELETE FROM sales_products WHERE sale_id = ?';
     await StoreManager.query(sql, [id]);
   },
+
+  async update(id, changes) { 
+    const sql = `UPDATE sales_products 
+    SET product_id = ?, quantity = ?
+    WHERE sale_id = ? AND product_id = ?;`;
+    await StoreManager.query(sql, [changes.productId, changes.quantity, id, changes.productId]);
+  },
 };
 
 module.exports = saleModel;

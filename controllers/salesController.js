@@ -53,6 +53,23 @@ const salesController = {
       return res.status(404).json({ message: error.message });
     }
   },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      console.log(req.params);
+      const changes = req.body;
+
+      await Promise.all(changes.map((item) => salesService.validateBodyAddProduct(item)));
+      await Promise.all(changes.map((item) => productService.checkExist(item.productId))); 
+      await salesService.listById(id);
+      const result = await salesService.update(id, changes);
+      console.log(result);
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = salesController;

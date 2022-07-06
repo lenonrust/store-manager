@@ -89,15 +89,7 @@ describe('controllers/salesController', () => {
           "quantity": 1
         }
       ];
-      const item = {
-        "id": 46,
-        "itemsSold": [
-          {
-            "productId": 1,
-            "quantity": 1
-          }
-        ]
-      };
+     
       sinon.stub(salesService, 'validateBodyAddProduct').resolves({});
       sinon.stub(productService, 'listByid').resolves({});
       sinon.stub(salesService, 'addProduct').resolves({});
@@ -135,5 +127,48 @@ describe('controllers/salesController', () => {
       await salesController.remove(req, res);
       chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204)
     });
+  });
+   describe('update', () => {
+    it('Should return error if "salesService.validateBodyAddProduct" fails', () => {
+      sinon.stub(salesService, 'validateBodyAddProduct').rejects();
+      chai.expect(salesController.update({}, [{}])).to.be.eventually.rejected;
+    })
+    it('Should return error if "productService.checkExist" fails', () => {
+      sinon.stub(salesService, 'validateBodyAddProduct').resolves();
+      sinon.stub(productService, 'checkExist').rejects()
+      chai.expect(salesController.add({}, [{}])).to.be.eventually.rejected;
+    })
+    
+    it('Should return error if "salesService.listById" fails', () => {
+      sinon.stub(salesService, 'validateBodyAddProduct').resolves();
+      sinon.stub(productService, 'checkExist').resolves(1);
+      sinon.stub(salesService, 'listById').rejects;
+      chai.expect(salesController.add({}, [{}])).to.be.eventually.rejected;
+    });
+
+    it('Should return a "res" with "status" 201 and a json', async () => {
+      const res = {
+        status: sinon.stub().callsFake(() => res),
+        json: sinon.stub().returns(),
+      };
+      
+      const req = {
+        params: { id: 2 },
+        body: [
+        {
+          "productId": 2,
+          "quantity": 15
+        }
+        ]
+      };
+      
+      sinon.stub(salesService, 'validateBodyAddProduct').resolves();
+      sinon.stub(productService, 'checkExist').resolves(1);
+      sinon.stub(salesService, 'listById').resolves({});
+      sinon.stub(salesService, 'update').resolves({})
+      await salesController.update(req, res);
+      chai.expect(res.status.getCall(0).args[0]).to.equal(200);
+      chai.expect(res.json.getCall(0).args[0]).to.be.deep.equal({})
+    })
   });
 })

@@ -88,5 +88,15 @@ describe('/model/salesModel', () => {
       return chai.expect(saleModel.removeProduct(0)).to.be.eventually.undefined;
     });
   });
+   describe('update', () => {
+    it('Should return an error if mysql query fails', () => {
+      sinon.stub(StoreManager, 'query').rejects();
+      return chai.expect(saleModel.update(0, {})).to.be.eventually.rejected;
+    });
+    it('should return undefined in case of success', () => {
+      sinon.stub(StoreManager, 'query').resolves();
+      return chai.expect(saleModel.update(0, {})).to.be.eventually.undefined;
+    });
+  });
 
 })

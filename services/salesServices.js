@@ -44,6 +44,16 @@ const salesService = {
   async removeProduct(id) {
     await salesModel.removeProduct(id);
   },
+
+  async update(id, changes) {
+    await Promise.all(changes.map((item) => salesModel.update(id, item)));
+    const result = {
+      saleId: id,
+      itemsUpdated: changes,
+    };
+    return result;
+  },
+
 };
 
 module.exports = salesService;
