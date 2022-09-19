@@ -1,5 +1,5 @@
 
-## 💻 App de receitas
+## 💻 Store manager
 
 Este proheto desenvolve uma API utilizando a arquitetura MSC (model-service-controller)!
 
